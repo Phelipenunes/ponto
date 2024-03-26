@@ -5,7 +5,7 @@ import MapView, { Marker } from "react-native-maps";
 
 export default function App() {
   const [localizacao, setLocalizacao] = useState(null);
-  const [data, setData] = useState(new Date()); // Inicializa com a data/hora atual
+  const [data, setData] = useState(new Date());
 
   useEffect(() => {
     (async () => {
@@ -42,8 +42,8 @@ export default function App() {
             initialRegion={{
               latitude: localizacao.coords.latitude,
               longitude: localizacao.coords.longitude,
-              latitudeDelta: 0.0922,
-              longitudeDelta: 0.0421,
+              latitudeDelta: 0.009,
+              longitudeDelta: 0.009,
             }}
           >
             <Marker
