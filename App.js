@@ -8,16 +8,31 @@ export default function App() {
   const [data, setData] = useState(new Date());
 
   useEffect(() => {
-    (async () => {
+    const solicitarPermissaoLocalizacao = async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== "granted") {
-        Alert.alert("Permissão para acessar a localização foi negada");
+        Alert.alert(
+          "Permissão para acessar a localização foi negada",
+          "Para usar este recurso, ative a permissão de localização nas configurações do seu dispositivo.",
+          [{ text: "OK" }]
+        );
         return;
       }
 
-      let localizacao = await Location.getCurrentPositionAsync({});
-      setLocalizacao(localizacao);
-    })();
+      try {
+        let localizacao = await Location.getCurrentPositionAsync({});
+        setLocalizacao(localizacao);
+      } catch (error) {
+        console.error("Erro ao obter localização:", error);
+        Alert.alert(
+          "Erro ao obter localização",
+          "Ocorreu um erro ao tentar obter a localização. Verifique as configurações do seu dispositivo e tente novamente.",
+          [{ text: "OK" }]
+        );
+      }
+    };
+
+    solicitarPermissaoLocalizacao();
   }, []);
 
   const registrarPonto = () => {
@@ -59,11 +74,11 @@ export default function App() {
           Data/Hora: {data ? data.toLocaleString("pt-BR") : "N/A"}
         </Text>
         <Button title="Registrar Ponto" onPress={registrarPonto} />
+        <Button title="Ver pontos marcados" />
       </View>
     </View>
   );
 }
-
 const estilos = StyleSheet.create({
   texto: {
     padding: 10,
